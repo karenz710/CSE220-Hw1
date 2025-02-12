@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <assert.h>
+#include <string.h>
 
 #include "hw1.h"
 
@@ -28,11 +29,22 @@ int initialize_board(const char *initial_state, const char *keys, int size) {
 	(void) initial_state;
 	(void) keys;
 	(void) size;
+	// set keys by parsing keys string (top,bottom,left,right)
+	// 01234567 (01) (23) (45) (67)
 	
+	for (int i = 0; i < size; i++){
+		// convert char int 
+		top_key[i] = keys[i] - '0';
+		bottom_key[i] = keys[i+2] - '0';
+		left_key[i] = keys[i+4];
+		right_key[i] = keys[i+6];
+	}
+	printf("top key: " );
+	for (int i = 0; i < size; i++) printf("%d ", top_key[i]);
 	return 1;
 }
 
-void print_board(){
+/*void print_board(){
 
 }
 int get_move(){
@@ -53,7 +65,7 @@ int check_col(int col){
 int try_move(char choice, int row, int col){
 	
 }
-
+*/
 int solve(const char *initial_state, const char *keys, int size){
 	(void) initial_state;
 	(void) keys;
