@@ -31,7 +31,6 @@ int initialize_board(const char *initial_state, const char *keys, int size) {
 	(void) size;
 	// set keys by parsing keys string (top,bottom,left,right)
 	// 01234567 (01) (23) (45) (67)
-	
 	for (int i = 0; i < size; i++){
 		// convert char int 
 		top_key[i] = keys[i] - '0';
@@ -39,8 +38,14 @@ int initialize_board(const char *initial_state, const char *keys, int size) {
 		left_key[i] = keys[i+4];
 		right_key[i] = keys[i+6];
 	}
-	printf("top key: " );
-	for (int i = 0; i < size; i++) printf("%d ", top_key[i]);
+	int ptr = 0;
+	// initialize board keys
+	for (int i = 0; i < size; i++){
+		for (int j = 0; j < size; j++){
+			board[i][j] = initial_state[ptr];
+			ptr+=1;
+		}
+	}
 	return 1;
 }
 
