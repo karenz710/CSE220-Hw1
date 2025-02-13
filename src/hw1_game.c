@@ -28,6 +28,7 @@ int main(int argc, char **argv) {
                 printf("Invalid choice. Choose a piece (1-%d) or q to quit: ", board_size);
             } 
         }
+
         // ask for row and col
         printf("Choose a row (0-%d): ", board_size-1);
         while(1) {
@@ -48,16 +49,20 @@ int main(int argc, char **argv) {
             }
         }
 
-        // check if row, col is occupied
+        // check if row, col is occupied Req 1F
         if (try_move(row, col) == 0) {
             printf("Invalid choice. That space is already occupied.\n");
             continue; // go back to start of move
         } 
-        
+
+        // Req 1G -> check for dup vals
         if (check_dupes_col(piece, col) || check_dupes_row(piece, row)){
             printf("Invalid choice. There is already a building with that height in that row or column.\n");
             continue;
         } 
+
+        // Req 1H -> if this piece is the last piece to place in a row or col, that results in an invalid key. 
+        
 
         board[row][col] = piece + '0';
         
