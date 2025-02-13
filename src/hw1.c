@@ -36,8 +36,8 @@ int initialize_board(const char *initial_state, const char *keys, int size) {
 		// convert char int 
 		top_key[i] = keys[i] - '0';
 		bottom_key[i] = keys[i+2] - '0';
-		left_key[i] = keys[i+4];
-		right_key[i] = keys[i+6];
+		left_key[i] = keys[i+4] - '0';
+		right_key[i] = keys[i+6] - '0';
 	}
 	int ptr = 0;
 	// initialize board keys
