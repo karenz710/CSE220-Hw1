@@ -53,14 +53,33 @@ int initialize_board(const char *initial_state, const char *keys, int size) {
 void print_board(){
     // print top keys
     printf("    ");
-    for (int i = 0; i<board_size; i++) {
+    for (int i = 0; i< board_size; i++) {
         printf("%d ", top_key[i]);
     }
 	printf("\n    ");
-	
     for (int i = 0; i < board_size; i++) {
         printf("v ");
     }
+	printf("\n");
+	// print a left key then > then that row and then print < and right key go by index: 0, 1, 2, 3, 4
+    for (int i = 0; i < board_size; i++){
+        printf("%d > ", left_key[i]);
+        for (int j = 0; j < board_size; j++){
+            printf("%c ", board[i][j]);
+        }
+        printf("< %d", right_key[i]);
+        printf("\n");
+    }
+    // print bottom row
+    printf("    ");
+	for (int i = 0; i < board_size; i++) {
+        printf("^ ");
+    }
+	printf("\n    ");
+    for (int i = 0; i<board_size; i++) {
+        printf("%d ", bottom_key[i]);
+    }
+    printf("\n");
 }
 /*
 int get_move(){
