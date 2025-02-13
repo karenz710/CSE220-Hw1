@@ -12,6 +12,6 @@ int main(int argc, char **argv) {
 	if (initialize_board(argv[2], argv[3], (int)strtoul(argv[1], NULL, 10)) == 0){
         printf("Invalid initial board state.");
     }
-	
+	print_board();
     return 0;
 }

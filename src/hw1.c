@@ -15,7 +15,7 @@ char board[MAX_LENGTH][MAX_LENGTH] = {0};
 
 int length = 5;
 
-
+int board_size;// global var
 // initial state "2112" (board state) numbers btwn 1-N or -; keys "12 (top) 21 (bottom) 12 (left) 21 (right)" (number of visible skyscrapers) btwn 0-N, 0 is no clue; size "2" nxn dim board
 /*    1 2
       v v  
@@ -26,6 +26,7 @@ int length = 5;
 */
 
 int initialize_board(const char *initial_state, const char *keys, int size) {
+	board_size = size;
 	(void) initial_state;
 	(void) keys;
 	(void) size;
@@ -48,10 +49,20 @@ int initialize_board(const char *initial_state, const char *keys, int size) {
 	}
 	return 1;
 }
-
-/*void print_board(){
-
+// helper methods
+void print_board(){
+    // print top keys
+    printf("    ");
+    for (int i = 0; i<board_size; i++) {
+        printf("%d ", top_key[i]);
+    }
+	printf("\n    ");
+	
+    for (int i = 0; i < board_size; i++) {
+        printf("v ");
+    }
 }
+/*
 int get_move(){
 
 }
