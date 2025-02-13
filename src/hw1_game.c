@@ -12,6 +12,52 @@ int main(int argc, char **argv) {
 	if (initialize_board(argv[2], argv[3], (int)strtoul(argv[1], NULL, 10)) == 0){
         printf("Invalid initial board state.");
     }
-	print_board();
+    while(1){
+        char choice;
+        int piece, row, col;
+    	print_board();
+        printf("Choose a piece (1-%d) or q to quit: ", board_size);
+        while(1){
+            scanf(" %c", &choice); 
+            if (choice == 'q'){
+                return 0;
+            } else if (choice >= '1' && choice <= '0' + board_size) {
+                piece = choice - '0';
+                break; 
+            } else {
+                printf("Invalid choice. Choose a piece (1-%d) or q to quit: ", board_size);
+            } 
+        }
+        // ask for row and col
+        printf("Choose a row (0-%d): ", board_size-1);
+        while(1) {
+            scanf("%d", &row);
+            if (row >= 0 && row <= board_size-1){
+                break;
+            } else {
+                printf("Invalid choice. Choose a row (0-%d): ", board_size-1);
+            }
+        }
+        printf("Choose a column (0-%d): ", board_size-1);
+        while(1) {
+            scanf("%d", &col);
+            if (col >= 0 && col <= board_size-1){
+                break;
+            } else {
+                printf("Invalid choice. Choose a column (0-%d): ", board_size-1);
+            }
+        }
+        // check if row, col is occupied
+        if (try_move(piece, row, col) == 0) {
+            printf("Invalid choice. That space is already occupied.\n");
+            continue; // go back to start of move
+        }
+        // check for fullness
+        if(isFull()){
+            printf("Congratulations, you have filled the board!\n");
+            print_board();
+            return 0;
+        }
+    }
     return 0;
 }

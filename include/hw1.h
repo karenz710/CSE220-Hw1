@@ -8,12 +8,15 @@
 #define MAX_LENGTH 8
 #define MAX_SEQUENCE_CAP  40320
 
+extern int board_size; // global var
+
 //Required:
 int initialize_board(const char *initial_state, const char *keys, int size);
 int solve(const char *initial_state, const char *keys, int size);
 
 //Part 1
 void print_board();
+int isFull();
 int get_move();
 int check_dupes_col(int col);
 int check_dupes_row(int row);
