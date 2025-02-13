@@ -9,6 +9,7 @@
 #define MAX_SEQUENCE_CAP  40320
 
 extern int board_size; // global var
+extern char board[MAX_LENGTH][MAX_LENGTH]; // global
 
 //Required:
 int initialize_board(const char *initial_state, const char *keys, int size);
@@ -18,11 +19,11 @@ int solve(const char *initial_state, const char *keys, int size);
 void print_board();
 int isFull();
 int get_move();
-int check_dupes_col(int col);
-int check_dupes_row(int row);
+int check_dupes_col(char piece, int col);
+int check_dupes_row(char piece, int row);
 int check_row(int row);
 int check_col(int col);
-int try_move(char choice, int row, int col);
+int try_move(int row, int col);
 
 /* Hints from our solution (feel free to use or ignore):
 

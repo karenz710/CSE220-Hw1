@@ -103,35 +103,40 @@ void print_board()
 	return 0;
 }
 
-int check_dupes_col(int col){
-	for (int i=0; i<board_size; i++){
+int check_col(int col){
+	return 0;
+	return 1;
+}
 
-	}
-	return 0;
-}
-int check_dupes_row(int row){
-	return 0;
-}
+
 int check_row(int row){
 
 	return 0;
 }
-int check_col(int col){
 
+*/
+// dupes col means there already exists a piece in the same col
+int check_dupes_col(char piece, int col){
+	for (int i=0; i<board_size; i++){
+		if (board[i][col] == piece + '0')
+			return 1; // duplicate found
+	}
 	return 0;
 }
-*/
-int try_move(char piece, int row, int col)
-{
+// dupes row means there already exists a piece in the same row, meaning check the same row change col
+int check_dupes_row(char piece, int row){
+	for (int i=0; i<board_size; i++) {
+		if(board[row][i] == piece + '0')
+			return 1;
+	}
+	return 0;
+}
+
+int try_move(int row, int col){
 	if (board[row][col] == '-')
-	{
-		board[row][col] = piece + '0';
-	}
+		return 1;
 	else
-	{
 		return 0;
-	}
-	return 1;
 }
 
 int isFull(){

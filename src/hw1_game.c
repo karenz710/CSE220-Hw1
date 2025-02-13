@@ -47,11 +47,20 @@ int main(int argc, char **argv) {
                 printf("Invalid choice. Choose a column (0-%d): ", board_size-1);
             }
         }
+
         // check if row, col is occupied
-        if (try_move(piece, row, col) == 0) {
+        if (try_move(row, col) == 0) {
             printf("Invalid choice. That space is already occupied.\n");
             continue; // go back to start of move
-        }
+        } 
+        
+        if (check_dupes_col(piece, col) || check_dupes_row(piece, row)){
+            printf("Invalid choice. There is already a building with that height in that row or column.\n");
+            continue;
+        } 
+
+        board[row][col] = piece + '0';
+        
         // check for fullness
         if(isFull()){
             printf("Congratulations, you have filled the board!\n");
