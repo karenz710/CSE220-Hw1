@@ -118,10 +118,47 @@ int check_col(char piece, int row, int col){
 	// otherwise there is only one "-" remaining and that is where it'll be placed
 	board[row][col] = piece;
 	// get corresponding top and bottom key 
-	//int topKeyCheck = top_key[col];
-	//int bottomKeyCheck = bottom_key[col];
-	board[row][col] = '-'; // reset board 
-	return 0;
+	int topKeyCheck = top_key[col];
+	int bottomKeyCheck = bottom_key[col];
+		// count the number of buildings that can be seen from above and below
+	/*  1
+		v  
+		2 
+		1
+        ^
+		2 */ 
+	// check top first
+	int res = 1;
+	char prev = board[0][col];
+	for (int i = 1; i<board_size;i++){
+		if(board[i][col] > prev){
+			res += 1;
+			prev = board[i][col];
+		} else { // reached a smaller building that can't be seen
+			break;
+		}	
+	}
+	if(res!=topKeyCheck){
+		board[row][col] = '-'; // reset board
+		return 0; // error
+	}
+	// right side 
+	res = 1;
+	prev = board[board_size-1][col];
+	for (int i = board_size-2; i>=0; i--) {
+		if(board[i][col] > prev){
+			res += 1;
+			prev = board[i][col];
+		} else { // reached a smaller building that can't be seen
+			break;
+		}	
+	}
+	if(res!=bottomKeyCheck){
+		board[row][col] = '-'; // reset board
+		return 0; // error
+	}
+	board[row][col] = '-'; // reset board necessary for other checks !
+	return 1;
 }
 
 int check_row(char piece, int row, int col){
