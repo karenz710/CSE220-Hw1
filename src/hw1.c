@@ -82,12 +82,16 @@ int initialize_board(const char *initial_state, const char *keys, int size)
 	// check for key errors:
 	for (int i = 0; i < board_size; i++) {
 		for(int j = 0; j < board_size; j++){
-			if (check_col(board[i][j], i, j) == 0) {
-                return 0; // col violation
-            }
-			if (check_row(board[i][j], i, j) == 0) {
-                return 0; // row violation
-            }
+			if (board[i][j]!='-'){
+				char piece = board[i][j];
+				board[i][j] = '-';
+				if (check_col(piece, i, j) == 0) {
+					return 0; // col violation
+				}
+				if (check_row(piece, i, j) == 0) {
+					return 0; // row violation
+				}
+			}
 		}
 	}
 
