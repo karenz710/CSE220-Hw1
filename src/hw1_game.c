@@ -10,7 +10,7 @@ int main(int argc, char **argv) {
     assert(argc == 4); //we want a size, board state, and a list of keys
     // returns 0 if fail, 1 if works
 	if (initialize_board(argv[2], argv[3], (int)strtoul(argv[1], NULL, 10)) == 0){
-        printf("Invalid initial board state.");
+        printf("Invalid initial board state."); // error 1G (duplicate piece) or error 1H (final piece wrong)
     }
     while(1){
         char choice;
@@ -56,15 +56,17 @@ int main(int argc, char **argv) {
         } 
 
         // Req 1G -> check for dup vals
-        if (check_dupes_col(piece, col) || check_dupes_row(piece, row)){
+        if (check_dupes_col(choice, col) == 0 || check_dupes_row(choice, row) == 0){
             printf("Invalid choice. There is already a building with that height in that row or column.\n");
             continue;
         } 
 
         // Req 1H -> if this piece is the last piece to place in a row or col, that results in an invalid key. 
-        
+        if (check_row(choice, row, col)==0 || check_col(choice, row, col)==0){
+            printf("Invalid choice. You violate one of the key requirements.");
+        }
 
-        board[row][col] = piece + '0';
+        board[row][col] = choice;
         
         // check for fullness
         if(isFull()){

@@ -21,8 +21,8 @@ int isFull();
 int get_move();
 int check_dupes_col(char piece, int col);
 int check_dupes_row(char piece, int row);
-int check_row(int row);
-int check_col(int col);
+int check_row(char piece, int row, int col);
+int check_col(char piece, int row, int col);
 int try_move(int row, int col);
 
 /* Hints from our solution (feel free to use or ignore):
