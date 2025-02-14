@@ -10,9 +10,10 @@ int main(int argc, char **argv) {
     assert(argc == 4); //we want a size, board state, and a list of keys
     // returns 0 if fail, 1 if works
 	if (initialize_board(argv[2], argv[3], (int)strtoul(argv[1], NULL, 10)) == 0){
-        printf("Invalid initial board state."); // error 1G (duplicate piece) or error 1H (final piece wrong)
-        return 1;
+        printf("Invalid initial board state.\n"); // error 1G (duplicate piece) or error 1H (final piece wrong)
+        return 0;
     }
+   
     while(1){
         char choice;
         int row, col;
