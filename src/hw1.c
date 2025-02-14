@@ -35,13 +35,12 @@ int initialize_board(const char *initial_state, const char *keys, int size)
 	(void)size;
 	// set keys by parsing keys string (top,bottom,left,right)
 	// 01234567 (01) (23) (45) (67)
-	for (int i = 0; i < size; i++)
-	{
+	for (int i = 0; i < size; i++){
 		// convert char to int
 		top_key[i] = keys[i] - '0';
-		bottom_key[i] = keys[i + 2] - '0';
-		left_key[i] = keys[i + 4] - '0';
-		right_key[i] = keys[i + 6] - '0';
+		bottom_key[i] = keys[board_size + i] - '0';
+		left_key[i] = keys[2 * board_size + i] - '0';
+		right_key[i] = keys[3 * board_size + i] - '0';
 	}
 	int ptr = 0;
 	// initialize board keys
