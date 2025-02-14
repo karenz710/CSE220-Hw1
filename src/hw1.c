@@ -87,9 +87,13 @@ int initialize_board(const char *initial_state, const char *keys, int size)
 				board[i][j] = '-';
 				if (check_col(piece, i, j) == 0) {
 					return 0; // col violation
+				}else{
+					board[i][j] = piece;
 				}
 				if (check_row(piece, i, j) == 0) {
 					return 0; // row violation
+				}else{
+					board[i][j] = piece;
 				}
 			}
 		}
