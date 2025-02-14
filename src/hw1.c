@@ -103,6 +103,7 @@ void print_board()
 }
 
 */
+
 // check if it violates the column height
 // if the key is a 0 then it tells no information, so unnecessary to check
 int check_col(char piece, int row, int col){
@@ -135,7 +136,7 @@ int check_col(char piece, int row, int col){
 			res += 1;
 			prev = board[i][col];
 		} else { // reached a smaller building that can't be seen
-			break;
+			;
 		}	
 	}
 	if(topKeyCheck==0){
@@ -152,7 +153,7 @@ int check_col(char piece, int row, int col){
 			res += 1;
 			prev = board[i][col];
 		} else { // reached a smaller building that can't be seen
-			break;
+			;
 		}	
 	}
 	if(bottomKeyCheck==0){
@@ -181,7 +182,7 @@ int check_row(char piece, int row, int col){
 	int leftKeyCheck = left_key[row];
 	int rightKeyCheck = right_key[row];
 	// count the number of buildings that can be seen from left
-	// 1 > 1 2 < 2
+	// 2 > 2 1 4 3 < 0
 	// left side
 	int res = 1;
 	char prev = board[row][0];
@@ -190,7 +191,7 @@ int check_row(char piece, int row, int col){
 			res += 1;
 			prev = board[row][i];
 		} else { // reached a smaller building that can't be seen
-			break;
+			;
 		}	
 	}
 	if(leftKeyCheck==0){
@@ -207,7 +208,7 @@ int check_row(char piece, int row, int col){
 			res += 1;
 			prev = board[row][i];
 		} else { // reached a smaller building that can't be seen
-			break;
+			;
 		}	
 	}
 	if(rightKeyCheck==0){
