@@ -52,6 +52,33 @@ int initialize_board(const char *initial_state, const char *keys, int size)
 			ptr += 1;
 		}
 	}
+	// check for duplicates in row
+	for (int i = 0; i < board_size; i++) {
+        int seen[MAX_LENGTH] = {0};
+		for(int j = 0; j < board_size; j++) {
+			char current = board[i][j];
+			if (current != '-' && seen[current - '0']) {
+				return 0;
+			}
+			if (current != '-') {
+                seen[current - '0'] = 1; // mark number as seen
+            }
+		}
+	}
+	// check for duplicates in col
+	for (int j = 0; j < board_size; j++) {
+        int seen[MAX_LENGTH] = {0}; 
+        for (int i = 0; i < board_size; i++) {
+            char current = board[i][j];
+            if (current != '-' && seen[current - '0']) { 
+                return 0; 
+            }
+            if (current != '-') {
+                seen[current - '0'] = 1; // mark this number as seen
+            }
+        }
+    }
+
 	return 1;
 }
 
