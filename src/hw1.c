@@ -105,6 +105,7 @@ void print_board()
 
 */
 // check if it violates the column height
+// if the key is a 0 then it tells no information, so unnecessary to check
 int check_col(char piece, int row, int col){
 	// first check if column is full; if it is not full return 1 it is full if count of '-' is more than one
 	int count = 0;
@@ -138,7 +139,9 @@ int check_col(char piece, int row, int col){
 			break;
 		}	
 	}
-	if(res!=topKeyCheck){
+	if(topKeyCheck==0){
+		; // don't check
+	}else if(res!=topKeyCheck){
 		board[row][col] = '-'; // reset board
 		return 0; // error
 	}
@@ -153,7 +156,9 @@ int check_col(char piece, int row, int col){
 			break;
 		}	
 	}
-	if(res!=bottomKeyCheck){
+	if(bottomKeyCheck==0){
+		;
+	} else if(res!=bottomKeyCheck){
 		board[row][col] = '-'; // reset board
 		return 0; // error
 	}
@@ -189,7 +194,9 @@ int check_row(char piece, int row, int col){
 			break;
 		}	
 	}
-	if(res!=leftKeyCheck){
+	if(leftKeyCheck==0){
+		;
+	} else if(res!=leftKeyCheck){
 		board[row][col] = '-'; // reset board
 		return 0; // error
 	}
@@ -204,7 +211,9 @@ int check_row(char piece, int row, int col){
 			break;
 		}	
 	}
-	if(res!=rightKeyCheck){
+	if(rightKeyCheck==0){
+		;
+	} else if(res!=rightKeyCheck){
 		board[row][col] = '-'; // reset board
 		return 0; // error
 	}
