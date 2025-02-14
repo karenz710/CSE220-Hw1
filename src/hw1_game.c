@@ -63,6 +63,7 @@ int main(int argc, char **argv) {
         // Req 1H -> if this piece is the last piece to place in a row or col, that results in an invalid key. 
         if (check_row(choice, row, col)==0 || check_col(choice, row, col)==0){
             printf("Invalid choice. You violate one of the key requirements.\n");
+            continue;
         }
 
         board[row][col] = choice;
