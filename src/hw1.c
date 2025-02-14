@@ -109,17 +109,18 @@ int check_col(char piece, int row, int col){
 	// first check if column is full; if it is not full return 1 it is full if count of '-' is more than one
 	int count = 0;
 	for (int i = 0; i<board_size; i++){
-		if(board[i][col]=="-")
+		if(board[i][col]=='-'){
 			count+=1;
 			if(count == 2)
 				return 1;
+		}
 	}
 	// otherwise there is only one "-" remaining and that is where it'll be placed
 	board[row][col] = piece;
 	// get corresponding top and bottom key 
-	int topKeyCheck = top_key[col];
-	int bottomKeyCheck = bottom_key[col];
-	board[row][col] = "-"; // reset board 
+	//int topKeyCheck = top_key[col];
+	//int bottomKeyCheck = bottom_key[col];
+	board[row][col] = '-'; // reset board 
 	return 0;
 }
 
@@ -127,12 +128,13 @@ int check_row(char piece, int row, int col){
 	// first check if row is full; if it is not full return 1 it is full if count of '-' is more than one
 	int count = 0;
 	for (int i = 0; i<board_size; i++){
-		if(board[row][i]=="-")
+		if(board[row][i]=='-'){
 			count+=1;
 			if(count == 2)
 				return 1;
+		}
 	}
-	// otherwise there is only one "-" remaining and that is where it'll be placed
+	// otherwise there is only one '-' remaining and that is where it'll be placed
 	board[row][col] = piece;
 	// get corresponding top and bottom key 
 	int leftKeyCheck = left_key[row];
@@ -151,7 +153,7 @@ int check_row(char piece, int row, int col){
 		}	
 	}
 	if(res!=leftKeyCheck){
-		board[row][col] = "-"; // reset board
+		board[row][col] = '-'; // reset board
 		return 0; // error
 	}
 	// right side 
@@ -166,10 +168,10 @@ int check_row(char piece, int row, int col){
 		}	
 	}
 	if(res!=rightKeyCheck){
-		board[row][col] = "-"; // reset board
+		board[row][col] = '-'; // reset board
 		return 0; // error
 	}
-	board[row][col] = "-"; // reset board necessary for other checks !
+	board[row][col] = '-'; // reset board necessary for other checks !
 	return 1;
 }
 
@@ -177,9 +179,9 @@ int check_row(char piece, int row, int col){
 int check_dupes_col(char piece, int col){
 	for (int i=0; i<board_size; i++){
 		if (board[i][col] == piece)
-			return 0; // duplicate found
+			return 1; // duplicate found
 	}
-	return 1;
+	return 0;
 }
 // dupes row means there already exists a piece in the same row, meaning check the same row change col
 int check_dupes_row(char piece, int row){

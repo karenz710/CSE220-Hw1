@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
     }
     while(1){
         char choice;
-        int piece, row, col;
+        int row, col;
     	print_board();
         printf("Choose a piece (1-%d) or q to quit: ", board_size);
         while(1){
@@ -22,7 +22,6 @@ int main(int argc, char **argv) {
             if (choice == 'q'){
                 return 0;
             } else if (choice >= '1' && choice <= '0' + board_size) {
-                piece = choice - '0';
                 break; 
             } else {
                 printf("Invalid choice. Choose a piece (1-%d) or q to quit: ", board_size);
@@ -56,14 +55,14 @@ int main(int argc, char **argv) {
         } 
 
         // Req 1G -> check for dup vals
-        if (check_dupes_col(choice, col) == 0 || check_dupes_row(choice, row) == 0){
+        if (check_dupes_col(choice, col) || check_dupes_row(choice, row)){
             printf("Invalid choice. There is already a building with that height in that row or column.\n");
             continue;
         } 
 
         // Req 1H -> if this piece is the last piece to place in a row or col, that results in an invalid key. 
         if (check_row(choice, row, col)==0 || check_col(choice, row, col)==0){
-            printf("Invalid choice. You violate one of the key requirements.");
+            printf("Invalid choice. You violate one of the key requirements.\n");
         }
 
         board[row][col] = choice;
