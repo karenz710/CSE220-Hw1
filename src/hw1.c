@@ -302,6 +302,9 @@ int isFull(){
 	}
 	return 1;
 }
+
+// solve functions
+
 int solve(const char *initial_state, const char *keys, int size)
 {
 	(void)initial_state;

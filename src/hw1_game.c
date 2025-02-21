@@ -13,7 +13,6 @@ int main(int argc, char **argv) {
         printf("Invalid initial board state.\n"); // error 1G (duplicate piece) or error 1H (final piece wrong)
         return 0;
     }
-   
     while(1){
         char choice;
         int row, col;
