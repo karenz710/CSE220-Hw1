@@ -349,7 +349,7 @@ bool apply_edge_constraint_rule(void){
 			}
 		} else if (key==board_size){ // 5 > 1 2 3 4 5
 			for(int row=0; row<board_size; row++){
-				if(board[row][col] == "-"){
+				if(board[row][col] == '-'){
 					set_cell_value(row, col, row+1);
 					changes_made = true;
 				}
@@ -367,7 +367,7 @@ bool apply_edge_constraint_rule(void){
 			}
 		} else if (key==board_size){ // 5 > 1 2 3 4 5
 			for(int row=board_size-1; row>0; row--){
-				if(board[row][col] == "-"){
+				if(board[row][col] == '-'){
 					set_cell_value(row, col, board_size-row);
 					changes_made = true;
 				}
