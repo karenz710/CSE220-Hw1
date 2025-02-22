@@ -52,7 +52,7 @@ int initialize_board(const char *initial_state, const char *keys, int size)
 			ptr += 1;
 		}
 	}
-	print_board();
+
 	// check for duplicates in row
 	for (int i = 0; i < board_size; i++) {
         int seen[MAX_LENGTH] = {0};
