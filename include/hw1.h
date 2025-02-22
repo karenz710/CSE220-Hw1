@@ -28,6 +28,9 @@ int try_move(int row, int col);
 //pt2
 bool apply_edge_constraint_rule(void);
 void set_cell_value(int row, int col, int value);
+//testing funcs
+void print_possible_pieces_state(void);
+void print_possible_pieces_at_cell(int row, int column);
 /* Hints from our solution (feel free to use or ignore):
 Part 2
 
@@ -43,11 +46,6 @@ void generate_valid_sequences_helper(int valid_sequences[MAX_SEQUENCE_CAP][MAX_L
 void generate_filtered_sequences(int filtered_sequences[MAX_SEQUENCE_CAP][MAX_LENGTH], bool is_horizontal, int index);
 bool sequence_filtration(bool is_horizontal, int index);
 bool apply_sequence_filtration(void);
-
-Testing functions
-
-void print_possible_pieces_state(void);
-void print_possible_pieces_at_cell(int row, int column);
 */
 
 

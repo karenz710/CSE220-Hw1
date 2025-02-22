@@ -6,6 +6,7 @@
 
 #include "hw1.h"
 
+// ./build/hw1_solver_tests
 int top_key[MAX_LENGTH] = {0};
 int bottom_key[MAX_LENGTH] = {0};
 int left_key[MAX_LENGTH] = {0};
@@ -328,8 +329,15 @@ int solve(const char *initial_state, const char *keys, int size)
 	} while (progress == 1 && isFull() == 0);
 	printf("solved board\n");
 	print_board();
+	print_possible_pieces_at_cell(0,1);
 	return 1;
 }
+
+typedef struct {
+    bool values[MAX_LENGTH + 1];  // +1 for 1-indexing
+} cell_possibilities;
+
+cell_possibilities possible_pieces[MAX_LENGTH][MAX_LENGTH];
 
 // takes in INT val *set all vals to ints*
 void set_cell_value(int row, int col, int value){
@@ -422,3 +430,33 @@ void edge_clue_initialization(void);
 bool apply_constraint_propagation(int row, int column, int piece);
 void apply_process_of_elimination(int row, int column, int piece);
 */
+
+// Testing functions
+void print_possible_pieces_state(void) {
+    printf("Possible Pieces State:\n");
+    for (int row = 0; row < MAX_LENGTH; row++) {
+        for (int col = 0; col < MAX_LENGTH; col++) {
+            printf("Cell (%d, %d): ", row, col);
+            for (int val = 1; val <= MAX_LENGTH; val++) {
+                if (possible_pieces[row][col].values[val]) {
+                    printf("%d ", val);
+                }
+            }
+            printf("\n");
+        }
+    }
+}
+void print_possible_pieces_at_cell(int row, int column){
+    if (row < 0 || row >= MAX_LENGTH || column < 0 || column >= MAX_LENGTH) {
+        printf("Invalid cell coordinates: (%d, %d)\n", row, column);
+        return;
+    }
+
+    printf("Possible Pieces at Cell (%d, %d): ", row, column);
+    for (int val = 1; val <= MAX_LENGTH; val++) {
+        if (possible_pieces[row][column].values[val]) {
+            printf("%d ", val);
+        }
+    }
+    printf("\n");
+}
