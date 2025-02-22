@@ -39,7 +39,11 @@ TEST_F(solver_tests, board4x4init){
     {'e', '$', 'l', '4', 'C', '*', 'A', 'k'},
     };
     memcpy(board, board_array, sizeof(board_array));
+    //printf("Initial Board:\n");
+    //print_board();
     solve(init_board, init_keys, 4);
+    //printf("Solved Board:\n");
+    //print_board();
     char exp_board[MAX_LENGTH][MAX_LENGTH] = {
     {'3', '4', '1', '2', 'm', '-', 'Z', 'g'},
     {'1', '2', '3', '4', ',', 'I', 'd', '3'},
