@@ -13,7 +13,7 @@ int right_key[MAX_LENGTH] = {0};
 
 char board[MAX_LENGTH][MAX_LENGTH] = {0};
 
-int length = 5;
+// int length = 5;
 
 int board_size; // global var
 
@@ -292,6 +292,7 @@ int try_move(int row, int col){
 		return 0;
 }
 
+// returns 0 if it is not full and 1 if it is full
 int isFull(){
 	for (int i = 0; i < board_size; i++){
 		for (int j = 0; j < board_size; j++){
@@ -304,12 +305,117 @@ int isFull(){
 }
 
 // solve functions
-
+// create a constraint list for each cell, if only one cell remains then populate the board with the val
 int solve(const char *initial_state, const char *keys, int size)
 {
 	(void)initial_state;
 	(void)keys;
 	(void)size;
 
+	if (initialize_board(initial_state, keys, size)==0) {
+        return 0;  // Invalid initial state
+    }
+
+	// apply heuristics until can't make progress
+	bool progress;
+	do {
+		progress = 0;
+		if (apply_edge_constraint_rule()) {
+            progress = 1;
+        }
+	} while (progress == 1 && isFull() == 0);
+
 	return 1;
 }
+
+// takes in INT val *set all vals to ints*
+void set_cell_value(int row, int col, int value){
+	board[row][col] = '0' + value;
+	// update constraint list for cells
+}
+
+// return 1 if made some progress 0 if no progress
+bool apply_edge_constraint_rule(void){
+	bool changes_made = 0;
+	//process top keys for 1 or for n
+	for (int col = 0; col < board_size; col++){
+		int key = top_key[col];
+		if (key == 1){
+			// tallest building must be at top (N)
+			if(board[0][col]=='-'){
+				set_cell_value(0, col, board_size);
+				changes_made = true;
+			}
+		} else if (key==board_size){ // 5 > 1 2 3 4 5
+			for(int row=0; row<board_size; row++){
+				if(board[row][col] == "-"){
+					set_cell_value(row, col, row+1);
+					changes_made = true;
+				}
+			}
+		}
+	}
+	// process bottom keys
+	for (int col = 0; col < board_size; col++){
+		int key = bottom_key[col];
+		if (key == 1){
+			// tallest building must be at bottom (N)
+			if(board[board_size-1][col]=='-'){
+				set_cell_value(board_size-1, col, board_size);
+				changes_made = true;
+			}
+		} else if (key==board_size){ // 5 > 1 2 3 4 5
+			for(int row=board_size-1; row>0; row--){
+				if(board[row][col] == "-"){
+					set_cell_value(row, col, board_size-row);
+					changes_made = true;
+				}
+			}
+		}
+	}
+	//process left keys
+	for (int row = 0; row < board_size; row++) {
+		int key = left_key[row];
+		if (key == 1) {
+			if (board[row][0] == '-') {
+				set_cell_value(row, 0, board_size);
+				changes_made = true;
+			}
+		} else if (key == board_size) {
+			for (int col = 0; col < board_size; col++) {
+				if (board[row][col] == '-') {
+					set_cell_value(row, col, col + 1);
+					changes_made = true;
+				}
+			}
+		}	
+	}
+	//process right keys
+	for (int row = 0; row < board_size; row++) {
+		int key = right_key[row];
+		if (key == 1) {
+			// Tallest building must be at the right
+			if (board[row][board_size - 1] == '-') {
+				set_cell_value(row, board_size - 1, board_size);
+				changes_made = true;
+			}
+		} else if (key == board_size) {
+			// Buildings must be in ascending order from right to left
+			for (int col = board_size - 1; col >= 0; col--) {
+				if (board[row][col] == '-') {
+					set_cell_value(row, col, board_size - col);
+					changes_made = true;
+				}
+			}
+		}
+	}
+	return changes_made;
+}
+
+// look for 1 and size N
+/*
+void edge_clue_initialization(void);
+
+bool apply_constraint_propagation(int row, int column, int piece);
+void apply_process_of_elimination(int row, int column, int piece);
+*/

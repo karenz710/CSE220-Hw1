@@ -27,7 +27,7 @@ class solver_tests : public testing::Test {
 // simple 4x4 that can be solved using only basic edge board initialization (i.e. when key = 1 or N)
 TEST_F(solver_tests, board4x4init){
     const char* init_board = "3-12-----12323-1";
-    const char* init_keys = "2132221324132122";
+    const char* init_keys = "2221321324132122";
     char board_array[MAX_LENGTH][MAX_LENGTH] = {
     {'$', '<', 'Y', '%', 'm', '-', 'Z', 'g'},
     {'_', '|', '-', '>', ',', 'I', 'd', '3'},

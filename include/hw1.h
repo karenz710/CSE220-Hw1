@@ -25,15 +25,14 @@ int check_row(char piece, int row, int col);
 int check_col(char piece, int row, int col);
 int try_move(int row, int col);
 
+//pt2
+void apply_edge_constraint_rule(void);
+void set_cell_value(int row, int col, int value);
 /* Hints from our solution (feel free to use or ignore):
-
-Part 1
-
-
 Part 2
 
 void edge_clue_initialization(void);
-void apply_edge_constraint_rule(void);
+
 bool apply_constraint_propagation(int row, int column, int piece);
 void apply_process_of_elimination(int row, int column, int piece);
 
