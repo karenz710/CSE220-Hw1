@@ -26,11 +26,14 @@ int check_col(char piece, int row, int col);
 int try_move(int row, int col);
 
 //pt2
+void initialize_possibilities();
 bool apply_edge_constraint_rule(void);
 void set_cell_value(int row, int col, int value);
 //testing funcs
+
 void print_possible_pieces_state(void);
 void print_possible_pieces_at_cell(int row, int column);
+
 /* Hints from our solution (feel free to use or ignore):
 Part 2
 

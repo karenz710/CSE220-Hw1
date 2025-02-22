@@ -14,6 +14,7 @@ int right_key[MAX_LENGTH] = {0};
 
 char board[MAX_LENGTH][MAX_LENGTH] = {0};
 
+bool possible_pieces[MAX_LENGTH][MAX_LENGTH][MAX_LENGTH+1] = {0}; // global var to track possible 
 // int length = 5;
 
 int board_size; // global var
@@ -306,7 +307,7 @@ int isFull(){
 	}
 	return 1;
 }
-
+ 
 // solve functions
 // create a constraint list for each cell, if only one cell remains then populate the board with the val
 int solve(const char *initial_state, const char *keys, int size)
@@ -314,9 +315,13 @@ int solve(const char *initial_state, const char *keys, int size)
 	(void)initial_state;
 	(void)keys;
 	(void)size;
+	
 	if (initialize_board(initial_state, keys, size)==0) {
         return 0;  // Invalid initial state
     }	
+
+	initialize_possibilities();
+	
 	printf("initial board\n");
 	print_board();
 	// apply heuristics until can't make progress
@@ -330,14 +335,30 @@ int solve(const char *initial_state, const char *keys, int size)
 	printf("solved board\n");
 	print_board();
 	print_possible_pieces_at_cell(0,1);
+	print_possible_pieces_at_cell(0,0);
 	return 1;
 }
 
-typedef struct {
-    bool values[MAX_LENGTH + 1];  // +1 for 1-indexing
-} cell_possibilities;
 
-cell_possibilities possible_pieces[MAX_LENGTH][MAX_LENGTH];
+// initialize possibilities
+void initialize_possibilities(){
+	for (int row = 0; row < board_size; row++) {
+        for (int col = 0; col < board_size; col++) {
+            if (board[row][col] != '-') {
+                // Cell already has a value, clear all possibilities except the assigned one
+                int piece = board[row][col] - '0';
+                for (int k = 1; k <= board_size; k++) {
+                    possible_pieces[row][col][k] = (k == piece); // index is true if possibility
+                }
+            } else {
+                // Cell is empty, all values are possible
+                for (int k = 1; k <= board_size; k++) {
+                    possible_pieces[row][col][k] = true;
+                }
+            }
+        }
+    }
+}
 
 // takes in INT val *set all vals to ints*
 void set_cell_value(int row, int col, int value){
@@ -425,38 +446,34 @@ bool apply_edge_constraint_rule(void){
 
 // look for 1 and size N
 /*
-void edge_clue_initialization(void);
-
 bool apply_constraint_propagation(int row, int column, int piece);
 void apply_process_of_elimination(int row, int column, int piece);
 */
 
 // Testing functions
 void print_possible_pieces_state(void) {
-    printf("Possible Pieces State:\n");
-    for (int row = 0; row < MAX_LENGTH; row++) {
-        for (int col = 0; col < MAX_LENGTH; col++) {
-            printf("Cell (%d, %d): ", row, col);
-            for (int val = 1; val <= MAX_LENGTH; val++) {
-                if (possible_pieces[row][col].values[val]) {
-                    printf("%d ", val);
-                }
-            }
-            printf("\n");
-        }
-    }
+   
 }
 void print_possible_pieces_at_cell(int row, int column){
-    if (row < 0 || row >= MAX_LENGTH || column < 0 || column >= MAX_LENGTH) {
-        printf("Invalid cell coordinates: (%d, %d)\n", row, column);
+	printf("Possible pieces at (%d,%d): ", row, column);
+    
+    // if the cell already has a value, show that
+    if (board[row][column] != '-') {
+        printf("placed val [%c]\n", board[row][column]);
         return;
     }
-
-    printf("Possible Pieces at Cell (%d, %d): ", row, column);
-    for (int val = 1; val <= MAX_LENGTH; val++) {
-        if (possible_pieces[row][column].values[val]) {
-            printf("%d ", val);
+    
+    // print all possible values
+    printf("[");
+    int count = 0;
+    for (int piece = 1; piece <= board_size; piece++) {
+        if (possible_pieces[row][column][piece]) { // if it is true then it is a possibility
+            if (count > 0) {
+                printf(", ");
+            }
+            printf("%d", piece);
+            count++;
         }
     }
-    printf("\n");
+    printf("]\n");
 }
