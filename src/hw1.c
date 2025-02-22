@@ -52,6 +52,7 @@ int initialize_board(const char *initial_state, const char *keys, int size)
 			ptr += 1;
 		}
 	}
+	print_board();
 	// check for duplicates in row
 	for (int i = 0; i < board_size; i++) {
         int seen[MAX_LENGTH] = {0};
@@ -90,6 +91,7 @@ int initialize_board(const char *initial_state, const char *keys, int size)
 				}else{
 					board[i][j] = piece;
 				}
+				board[i][j] = '-';
 				if (check_row(piece, i, j) == 0) {
 					return 0; // row violation
 				}else{
@@ -308,15 +310,14 @@ int isFull(){
 // create a constraint list for each cell, if only one cell remains then populate the board with the val
 int solve(const char *initial_state, const char *keys, int size)
 {
-	
 	(void)initial_state;
 	(void)keys;
 	(void)size;
-
 	if (initialize_board(initial_state, keys, size)==0) {
         return 0;  // Invalid initial state
-    }
-
+    }	
+	printf("initial board\n");
+	print_board();
 	// apply heuristics until can't make progress
 	bool progress;
 	do {
@@ -325,7 +326,8 @@ int solve(const char *initial_state, const char *keys, int size)
             progress = 1;
         }
 	} while (progress == 1 && isFull() == 0);
-	
+	printf("solved board\n");
+	print_board();
 	return 1;
 }
 

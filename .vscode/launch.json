@@ -6,7 +6,8 @@
             "request": "launch",
             "name": "Run Game",
             "program": "${workspaceRoot}/build/hw1_game",
-            "args": ["2", "----", "12211221"],
+            //"args": ["2", "----", "12211221"],
+            "args": ["4", "3-12-----12323-1", "2221321324132122"],
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "CMake: build"
         },
@@ -15,7 +16,8 @@
             "request": "launch",
             "name": "Run Solver",
             "program": "${workspaceRoot}/build/hw1_solver",
-			"args": ["2", "----", "12211221"],
+			//"args": ["2", "----", "12211221"],
+            "args": ["4", "3-12-----12323-1", "2221321324132122"],
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "CMake: build"
         },
