@@ -308,6 +308,7 @@ int isFull(){
 // create a constraint list for each cell, if only one cell remains then populate the board with the val
 int solve(const char *initial_state, const char *keys, int size)
 {
+	print_board();
 	(void)initial_state;
 	(void)keys;
 	(void)size;
@@ -324,7 +325,7 @@ int solve(const char *initial_state, const char *keys, int size)
             progress = 1;
         }
 	} while (progress == 1 && isFull() == 0);
-
+	print_board();
 	return 1;
 }
 
