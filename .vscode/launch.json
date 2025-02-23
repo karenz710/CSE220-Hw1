@@ -17,7 +17,7 @@
             "name": "Run Solver",
             "program": "${workspaceRoot}/build/hw1_solver",
 			//"args": ["2", "----", "12211221"],
-            "args": ["4", "3-12-----12323-1", "2221321324132122"],
+            "args": ["4", "3-2-431-1-4--1-4", "2124242121333321"],
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "CMake: build"
         },

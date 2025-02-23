@@ -321,7 +321,13 @@ int solve(const char *initial_state, const char *keys, int size)
     }	
 
 	initialize_possibilities();
-	
+	for (int row = 0; row < board_size; row++) {
+        for (int col = 0; col < board_size; col++) {
+			int piece = board[row][col] - '0';
+			apply_constraint_propagation(row, col, piece);
+		}
+	}
+	print_possible_pieces_state();
 	printf("initial board\n");
 	print_board();
 	// apply heuristics until can't make progress
@@ -336,9 +342,57 @@ int solve(const char *initial_state, const char *keys, int size)
 	print_board();
 	print_possible_pieces_at_cell(0,1);
 	print_possible_pieces_at_cell(0,0);
+	print_possible_pieces_at_cell(1,0);
+	print_possible_pieces_at_cell(3,0);
+	print_possible_pieces_at_cell(3,2);
 	return 1;
 }
 
+void populate(int row, int col){
+	// also check if one key is left then populate it with the board
+	int count = 0;
+	for(int i = 1; i <= board_size; i++) {
+		if(possible_pieces[row][col][i]==true)
+			count+=1;
+	}
+	int piece = 1;
+	if(count == 1){ // find the val thats true
+		for(int i = 1; i <= board_size; i++){
+			if(possible_pieces[row][col][i]==true)
+				piece = i;
+		}
+		// set board to piece as a char
+		board[row][col] = piece + '0';
+
+	}
+
+}
+
+bool apply_constraint_propagation(int row, int col, int value){
+	printf("%d %d\n", row, col);
+	bool changes_made = false;
+	// also check if one key is left then populate it with the board
+	// remove this value from the same row
+    for (int c = 0; c < board_size; c++) {
+        if (c != col && board[row][c] == '-') {
+            possible_pieces[row][c][value] = false;
+			// try populate which checks if only one val
+			populate(row, c);
+            changes_made = true;
+        }
+    }
+    // Remove this value from the same column
+    for (int r = 0; r < board_size; r++) {
+        if (r != row && board[r][col] == '-') {
+            possible_pieces[r][col][value] = false;
+			populate(r,col);
+            changes_made = true;
+			print_possible_pieces_state();
+        }
+    }
+    
+    return changes_made;
+}
 
 // initialize possibilities
 void initialize_possibilities(){
@@ -348,8 +402,10 @@ void initialize_possibilities(){
                 // Cell already has a value, clear all possibilities except the assigned one
                 int piece = board[row][col] - '0';
                 for (int k = 1; k <= board_size; k++) {
-                    possible_pieces[row][col][k] = (k == piece); // index is true if possibility
+                    possible_pieces[row][col][k] = (k == piece); // index is true if possibility otherwise it is false
+					// apply constraint propagation to elimate possibilities
                 }
+				// apply_constraint_propagation(row, col, piece);
             } else {
                 // Cell is empty, all values are possible
                 for (int k = 1; k <= board_size; k++) {
@@ -364,6 +420,10 @@ void initialize_possibilities(){
 void set_cell_value(int row, int col, int value){
 	board[row][col] = '0' + value;
 	// update constraint list for cells
+	for (int k = 1; k <= board_size; k++) {
+		possible_pieces[row][col][k] = (k == value); // index is true if possibility otherwise it is false
+	}
+	apply_constraint_propagation(row, col, value);
 }
 
 // return 1 if made some progress 0 if no progress
@@ -384,6 +444,16 @@ bool apply_edge_constraint_rule(void){
 					set_cell_value(row, col, row+1);
 					changes_made = true;
 				}
+			}
+		} else if (key > 1 && key < board_size) {
+			// Apply edge constraint rule
+			// find the key and then iterate through the col eliminating possibilities
+			// iterate thru each pos
+			for (int d = 0; d < board_size; d++){
+				int lower_bound = board_size - key + 2 + d;
+				for(int i = lower_bound; i <= board_size; i++)
+					possible_pieces[d][col][i] = false;
+				// set lower_bound to board_size inclusive to false
 			}
 		}
 	}
@@ -452,7 +522,30 @@ void apply_process_of_elimination(int row, int column, int piece);
 
 // Testing functions
 void print_possible_pieces_state(void) {
-   
+   printf("Possible pieces state:\n");
+    for (int row = 0; row < board_size; row++) {
+        for (int col = 0; col < board_size; col++) {
+            printf("(%d,%d): ", row, col);
+            if (board[row][col] != '-') {
+                // cell is already solved
+                printf("%c ", board[row][col]);
+            } else {
+                printf("[");
+                int count = 0;
+                for (int piece = 1; piece <= board_size; piece++) {
+                    if (possible_pieces[row][col][piece]) {
+                        if (count > 0) {
+                            printf(", ");
+                        }
+                        printf("%d", piece);
+                        count++;
+                    }
+                }
+                printf("] ");
+            }
+        }
+        printf("\n");
+    }
 }
 void print_possible_pieces_at_cell(int row, int column){
 	printf("Possible pieces at (%d,%d): ", row, column);

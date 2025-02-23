@@ -29,6 +29,8 @@ int try_move(int row, int col);
 void initialize_possibilities();
 bool apply_edge_constraint_rule(void);
 void set_cell_value(int row, int col, int value);
+bool apply_constraint_propagation(int row, int column, int piece);
+void populate(int row, int col);
 //testing funcs
 
 void print_possible_pieces_state(void);
@@ -38,8 +40,6 @@ void print_possible_pieces_at_cell(int row, int column);
 Part 2
 
 void edge_clue_initialization(void);
-
-bool apply_constraint_propagation(int row, int column, int piece);
 void apply_process_of_elimination(int row, int column, int piece);
 
 Part 3
