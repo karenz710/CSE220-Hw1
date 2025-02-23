@@ -615,8 +615,8 @@ void print_possible_pieces_at_cell(int row, int column){
     printf("]\n");
 }
 
-// --- Helper globals for sequence generation --- 
-// These variables keep track of how many sequences were generated.
+
+//keep track of how many sequences were generated.
 static int valid_seq_count = 0;
 static int filtered_seq_count = 0;
 
@@ -647,10 +647,17 @@ void generate_valid_sequences_helper(int valid_sequences[MAX_SEQUENCE_CAP][MAX_L
                                      bool is_horizontal, int index,
                                      int sequence[MAX_LENGTH], int starts_at) {
     if (starts_at == board_size) {
-        // For a horizontal row, the clues are in left_key and right_key;
-        // for a vertical column, they are in top_key and bottom_key.
-        int clue1 = is_horizontal ? left_key[index] : top_key[index];
-        int clue2 = is_horizontal ? right_key[index] : bottom_key[index];
+		int clue1, clue2;
+		if(is_horizontal){
+			clue1 = left_key[index];
+		}else{
+			clue1 = top_key[index];
+		}
+		if(is_horizontal){
+			clue2 = right_key[index];
+		}else{
+			clue2 = bottom_key[index];
+		}
 
         if (clue1 != 0 && visible_count(sequence, board_size, true) != clue1)
             return;
@@ -665,7 +672,7 @@ void generate_valid_sequences_helper(int valid_sequences[MAX_SEQUENCE_CAP][MAX_L
         }
         return;
     }
-    // Try every number from 1 to board_size that is not already in sequence.
+    //try every number from 1 to board_size that is not already in sequence.
     for (int num = 1; num <= board_size; num++) {
         bool used = false;
         for (int j = 0; j < starts_at; j++) {
@@ -695,8 +702,6 @@ void generate_filtered_sequences(int filtered_sequences[MAX_SEQUENCE_CAP][MAX_LE
     int temp_valid_sequences[MAX_SEQUENCE_CAP][MAX_LENGTH];
     generate_valid_sequences(temp_valid_sequences, is_horizontal, index);
     filtered_seq_count = 0;  // reset counter
-
-    // Loop over all valid sequences.
     for (int s = 0; s < valid_seq_count; s++) {
         bool valid = true;
         for (int pos = 0; pos < board_size; pos++) {
@@ -746,27 +751,28 @@ bool sequence_filtration(bool is_horizontal, int index) {
     if (filtered_seq_count == 0) {
         return false;
     }
-    // Process each position in the row (or column)
+    // 
     for (int pos = 0; pos < board_size; pos++) {
         int row, col;
         if (is_horizontal) {
             row = index;
             col = pos;
-        } else {
+        }else{
             row = pos;
             col = index;
         }
-        // Skip if the cell is already filled.
-        if (board[row][col] != '-') continue;
+        //skip if the cell is already filled.
+        if (board[row][col] != '-') 
+			continue;
 
-        // Build the set of candidates from all viable sequences for this cell.
-        bool viableCandidates[MAX_LENGTH+1] = { false };  // indices 1..board_size (index 0 unused)
+        // set of candidates from all viable sequences for this cell.
+        bool viableCandidates[MAX_LENGTH+1] = { false };  //
         for (int s = 0; s < filtered_seq_count; s++) {
             int candidate = filtered_sequences[s][pos];
             viableCandidates[candidate] = true;
         }
 
-        // Check if all sequences agree on the same candidate.
+        //check if all sequences agree on the same candidate.
         bool all_same = true;
         int common_val = filtered_sequences[0][pos];
         for (int s = 1; s < filtered_seq_count; s++) {
@@ -776,11 +782,11 @@ bool sequence_filtration(bool is_horizontal, int index) {
             }
         }
         if (all_same) {
-            // Forced placement: all sequences agree on this candidate.
+            // All sequences agree on this candidate.
             set_cell_value(row, col, common_val);
             progress = true;
         } else {
-            // Update the constraint list: remove any candidate not present in viableCandidates.
+            // update the constraint list: remove any candidate not present in viableCandidates.
             for (int candidate = 1; candidate <= board_size; candidate++) {
                 bool old_possible = possible_pieces[row][col][candidate];
                 possible_pieces[row][col][candidate] = possible_pieces[row][col][candidate] && viableCandidates[candidate];
@@ -788,7 +794,7 @@ bool sequence_filtration(bool is_horizontal, int index) {
                     progress = true;
                 }
             }
-            // Check if only one possibility remains—if so, force the value.
+            //if only one possibility force the value.
             int count = 0;
             int forced_val = 0;
             for (int candidate = 1; candidate <= board_size; candidate++) {
