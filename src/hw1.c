@@ -565,7 +565,7 @@ void print_possible_pieces_state(void) {
     }
 }
 
-int apply_process_of_elimination(int row, int col, int piece){
+bool apply_process_of_elimination(int row, int col, int piece){
 	// rows
 	bool hasFoundPiece = false;
 	for (int c = 0; c < board_size; c++) {
