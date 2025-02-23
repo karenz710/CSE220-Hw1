@@ -341,7 +341,7 @@ int solve(const char *initial_state, const char *keys, int size)
 			progress = 1; 
 		}
 
-		
+
 		if (apply_edge_constraint_rule()) {
             progress = 1;
         }
@@ -349,8 +349,9 @@ int solve(const char *initial_state, const char *keys, int size)
 			for (int col = 0; col < board_size; col++) {
 				for (int piece = 1; piece <= board_size; piece++) {
 					if(board[row][col] == '-'){
-						apply_process_of_elimination(row,col, piece);
-						progress = 1;
+						if( apply_process_of_elimination(row,col, piece)){
+							progress = 1;
+						}
 					}	
 				}
 			}
