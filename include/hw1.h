@@ -40,8 +40,9 @@ void print_possible_pieces_at_cell(int row, int column);
 Part 2
 
 void edge_clue_initialization(void);
+*/
 void apply_process_of_elimination(int row, int column, int piece);
-
+/*
 Part 3
 
 void generate_valid_sequences(int valid_sequences[MAX_SEQUENCE_CAP][MAX_LENGTH], bool is_horizontal, int index);

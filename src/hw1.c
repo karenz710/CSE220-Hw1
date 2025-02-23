@@ -339,14 +339,22 @@ int solve(const char *initial_state, const char *keys, int size)
 		if (apply_edge_constraint_rule()) {
             progress = 1;
         }
+		for (int row = 0; row < board_size; row++) {
+			for (int col = 0; col < board_size; col++) {
+				for (int piece = 1; piece <= board_size; piece++) {
+					if(board[row][col] == '-'){
+						apply_process_of_elimination(row,col, piece);
+					}	
+				}
+			}
+		}
+
+
+				
 	} while (progress == 1 && isFull() == 0);
 	printf("solved board\n");
 	print_board();
-	print_possible_pieces_at_cell(0,1);
-	print_possible_pieces_at_cell(0,0);
-	print_possible_pieces_at_cell(1,0);
-	print_possible_pieces_at_cell(3,0);
-	print_possible_pieces_at_cell(3,2);
+	print_possible_pieces_state();
 	return 1;
 }
 
@@ -371,7 +379,6 @@ void populate(int row, int col){
 }
 
 bool apply_constraint_propagation(int row, int col, int value){
-	printf("%d %d\n", row, col);
 	bool changes_made = false;
 	// also check if one key is left then populate it with the board
 	// remove this value from the same row
@@ -389,7 +396,7 @@ bool apply_constraint_propagation(int row, int col, int value){
             possible_pieces[r][col][value] = false;
 			populate(r,col);
             changes_made = true;
-			print_possible_pieces_state();
+			// print_possible_pieces_state();
         }
     }
     
@@ -548,6 +555,32 @@ void print_possible_pieces_state(void) {
         }
         printf("\n");
     }
+}
+
+void apply_process_of_elimination(int row, int col, int piece){
+	// rows
+	bool hasFoundPiece = false;
+	for (int c = 0; c < board_size; c++) {
+		if(c != col && possible_pieces[row][c][piece] == true){
+			hasFoundPiece = true;
+		}
+	}
+	if(!hasFoundPiece){
+		// We havent found the piece so we can insert it.
+		set_cell_value(row, col, piece);
+		return;
+	}
+	hasFoundPiece = false;
+	for (int r = 0; r < board_size; r++) {
+		if(r != row && possible_pieces[r][col][piece] == true){
+			hasFoundPiece = true;
+		}
+	}
+	if(!hasFoundPiece){
+		// We havent found the piece so we can insert it.
+		set_cell_value(row, col, piece);
+		return;
+	}
 }
 void print_possible_pieces_at_cell(int row, int column){
 	printf("Possible pieces at (%d,%d): ", row, column);
