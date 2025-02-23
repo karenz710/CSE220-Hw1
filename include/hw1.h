@@ -41,7 +41,7 @@ Part 2
 
 void edge_clue_initialization(void);
 */
-void apply_process_of_elimination(int row, int column, int piece);
+bool apply_process_of_elimination(int row, int column, int piece);
 /*
 Part 3
 */
