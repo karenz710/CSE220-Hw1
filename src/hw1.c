@@ -357,21 +357,7 @@ int solve(const char *initial_state, const char *keys, int size)
 			}
 		}
 
-		for (int row = 0; row < board_size; row++){
-            for (int col = 0; col < board_size; col++){
-                if (board[row][col] == '-') {
-                    int count = 0;
-                    for (int i = 1; i <= board_size; i++){
-                        if (possible_pieces[row][col][i])
-                            count++;
-                    }
-                    if (count == 1) {
-                        populate(row, col);
-                        progress = true;
-                    }
-                }
-            }
-        }
+		
 				
 	} while (progress == 1 && isFull() == 0);
 	printf("solved board\n");
@@ -760,15 +746,29 @@ bool sequence_filtration(bool is_horizontal, int index) {
     if (filtered_seq_count == 0) {
         return false;
     }
+    // Process each position in the row (or column)
     for (int pos = 0; pos < board_size; pos++) {
-        // Skip if cell is already filled.
+        int row, col;
         if (is_horizontal) {
-            if (board[index][pos] != '-') continue;
+            row = index;
+            col = pos;
         } else {
-            if (board[pos][index] != '-') continue;
+            row = pos;
+            col = index;
         }
-        int common_val = filtered_sequences[0][pos];
+        // Skip if the cell is already filled.
+        if (board[row][col] != '-') continue;
+
+        // Build the set of candidates from all viable sequences for this cell.
+        bool viableCandidates[MAX_LENGTH+1] = { false };  // indices 1..board_size (index 0 unused)
+        for (int s = 0; s < filtered_seq_count; s++) {
+            int candidate = filtered_sequences[s][pos];
+            viableCandidates[candidate] = true;
+        }
+
+        // Check if all sequences agree on the same candidate.
         bool all_same = true;
+        int common_val = filtered_sequences[0][pos];
         for (int s = 1; s < filtered_seq_count; s++) {
             if (filtered_sequences[s][pos] != common_val) {
                 all_same = false;
@@ -776,16 +776,36 @@ bool sequence_filtration(bool is_horizontal, int index) {
             }
         }
         if (all_same) {
-            // Place the forced value.
-            if (is_horizontal)
-                set_cell_value(index, pos, common_val);
-            else
-                set_cell_value(pos, index, common_val);
+            // Forced placement: all sequences agree on this candidate.
+            set_cell_value(row, col, common_val);
             progress = true;
+        } else {
+            // Update the constraint list: remove any candidate not present in viableCandidates.
+            for (int candidate = 1; candidate <= board_size; candidate++) {
+                bool old_possible = possible_pieces[row][col][candidate];
+                possible_pieces[row][col][candidate] = possible_pieces[row][col][candidate] && viableCandidates[candidate];
+                if (old_possible && !possible_pieces[row][col][candidate]) {
+                    progress = true;
+                }
+            }
+            // Check if only one possibility remains—if so, force the value.
+            int count = 0;
+            int forced_val = 0;
+            for (int candidate = 1; candidate <= board_size; candidate++) {
+                if (possible_pieces[row][col][candidate]) {
+                    count++;
+                    forced_val = candidate;
+                }
+            }
+            if (count == 1) {
+                set_cell_value(row, col, forced_val);
+                progress = true;
+            }
         }
     }
     return progress;
 }
+
 
 bool apply_sequence_filtration(void) {
     bool progress = false;
