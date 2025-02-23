@@ -357,7 +357,21 @@ int solve(const char *initial_state, const char *keys, int size)
 			}
 		}
 
-		
+		for (int row = 0; row < board_size; row++){
+            for (int col = 0; col < board_size; col++){
+                if (board[row][col] == '-') {
+                    int count = 0;
+                    for (int i = 1; i <= board_size; i++){
+                        if (possible_pieces[row][col][i])
+                            count++;
+                    }
+                    if (count == 1) {
+                        populate(row, col);
+                        progress = true;
+                    }
+                }
+            }
+        }
 				
 	} while (progress == 1 && isFull() == 0);
 	printf("solved board\n");
