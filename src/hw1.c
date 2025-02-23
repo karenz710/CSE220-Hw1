@@ -349,7 +349,7 @@ int solve(const char *initial_state, const char *keys, int size)
 			for (int col = 0; col < board_size; col++) {
 				for (int piece = 1; piece <= board_size; piece++) {
 					if(board[row][col] == '-'){
-						if( apply_process_of_elimination(row,col, piece)){
+						if(apply_process_of_elimination(row,col, piece)){
 							progress = 1;
 						}
 					}	
@@ -565,7 +565,7 @@ void print_possible_pieces_state(void) {
     }
 }
 
-void apply_process_of_elimination(int row, int col, int piece){
+int apply_process_of_elimination(int row, int col, int piece){
 	// rows
 	bool hasFoundPiece = false;
 	for (int c = 0; c < board_size; c++) {
@@ -576,7 +576,7 @@ void apply_process_of_elimination(int row, int col, int piece){
 	if(!hasFoundPiece){
 		// We havent found the piece so we can insert it.
 		set_cell_value(row, col, piece);
-		return;
+		return 1;
 	}
 	hasFoundPiece = false;
 	for (int r = 0; r < board_size; r++) {
@@ -587,8 +587,9 @@ void apply_process_of_elimination(int row, int col, int piece){
 	if(!hasFoundPiece){
 		// We havent found the piece so we can insert it.
 		set_cell_value(row, col, piece);
-		return;
+		return 1;
 	}
+	return 0;
 }
 void print_possible_pieces_at_cell(int row, int column){
 	printf("Possible pieces at (%d,%d): ", row, column);
