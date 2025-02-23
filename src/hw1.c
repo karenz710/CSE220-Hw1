@@ -321,12 +321,12 @@ int solve(const char *initial_state, const char *keys, int size)
     }	
 
 	initialize_possibilities();
-	for (int row = 0; row < board_size; row++) {
-        for (int col = 0; col < board_size; col++) {
-			int piece = board[row][col] - '0';
-			apply_constraint_propagation(row, col, piece);
-		}
-	}
+	// for (int row = 0; row < board_size; row++) {
+    //     for (int col = 0; col < board_size; col++) {
+	// 		int piece = board[row][col] - '0';
+	// 		apply_constraint_propagation(row, col, piece);
+	// 	}
+	// }
 	print_possible_pieces_state();
 	printf("initial board\n");
 	print_board();
