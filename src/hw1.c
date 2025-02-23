@@ -351,7 +351,7 @@ int solve(const char *initial_state, const char *keys, int size)
 		}
 
 		if(apply_sequence_filtration()){
-			progress = 1;
+			progress = 1; 
 		}
 				
 	} while (progress == 1 && isFull() == 0);
