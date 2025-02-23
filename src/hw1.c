@@ -336,6 +336,12 @@ int solve(const char *initial_state, const char *keys, int size)
 	bool progress;
 	do {
 		progress = 0;
+
+		if(apply_sequence_filtration()){
+			progress = 1; 
+		}
+
+		
 		if (apply_edge_constraint_rule()) {
             progress = 1;
         }
@@ -350,9 +356,7 @@ int solve(const char *initial_state, const char *keys, int size)
 			}
 		}
 
-		if(apply_sequence_filtration()){
-			progress = 1; 
-		}
+		
 				
 	} while (progress == 1 && isFull() == 0);
 	printf("solved board\n");
@@ -614,9 +618,7 @@ void print_possible_pieces_at_cell(int row, int column){
 static int valid_seq_count = 0;
 static int filtered_seq_count = 0;
 
-// --- Helper function: visible_count ---
-// Given a complete sequence (an array of ints), this function returns the number of "buildings" visible
-// when looking from left (if from_left is true) or from right (if false).
+//helper
 static int visible_count(const int sequence[], int length, bool from_left) {
     int count = 0;
     int max = 0;
@@ -638,10 +640,7 @@ static int visible_count(const int sequence[], int length, bool from_left) {
     return count;
 }
 
-// --- generate_valid_sequences_helper ---
-// This recursive helper builds a permutation (stored in "sequence") and, when complete,
-// checks that it satisfies the clue(s) for the given row (if is_horizontal==true)
-// or column (if false). If it does, it is stored in the valid_sequences array.
+
 void generate_valid_sequences_helper(int valid_sequences[MAX_SEQUENCE_CAP][MAX_LENGTH],
                                      bool is_horizontal, int index,
                                      int sequence[MAX_LENGTH], int starts_at) {
@@ -680,10 +679,7 @@ void generate_valid_sequences_helper(int valid_sequences[MAX_SEQUENCE_CAP][MAX_L
     }
 }
 
-// --- generate_valid_sequences ---
-// For a given row (if is_horizontal is true) or column (if false) at "index",
-// generate all sequences (permutations of 1..N) that satisfy the edge clues.
-// The valid sequences are stored in valid_sequences.
+
 void generate_valid_sequences(int valid_sequences[MAX_SEQUENCE_CAP][MAX_LENGTH],
                               bool is_horizontal, int index) {
     valid_seq_count = 0;  // reset counter
@@ -691,11 +687,7 @@ void generate_valid_sequences(int valid_sequences[MAX_SEQUENCE_CAP][MAX_LENGTH],
     generate_valid_sequences_helper(valid_sequences, is_horizontal, index, sequence, 0);
 }
 
-// --- generate_filtered_sequences ---
-// Starting from all valid sequences (as generated above) for a given row/column,
-// filter them to match the current board state. For every cell in that row/column:
-//   - If the board already has a value, the sequence must agree with that value.
-//   - If the board cell is empty ('-'), the candidate value must be among its possible pieces.
+
 void generate_filtered_sequences(int filtered_sequences[MAX_SEQUENCE_CAP][MAX_LENGTH],
                                  bool is_horizontal, int index) {
     int temp_valid_sequences[MAX_SEQUENCE_CAP][MAX_LENGTH];
@@ -744,11 +736,7 @@ void generate_filtered_sequences(int filtered_sequences[MAX_SEQUENCE_CAP][MAX_LE
     }
 }
 
-// --- sequence_filtration ---
-// For the given row/column, look at all filtered sequences. For each empty cell,
-// if all the filtered sequences assign the same number at that position,
-// then that number is “forced” and is placed on the board (via set_cell_value).
-// Returns true if any cell was filled.
+
 bool sequence_filtration(bool is_horizontal, int index) {
     int filtered_sequences[MAX_SEQUENCE_CAP][MAX_LENGTH];
     generate_filtered_sequences(filtered_sequences, is_horizontal, index);
@@ -783,9 +771,6 @@ bool sequence_filtration(bool is_horizontal, int index) {
     return progress;
 }
 
-// --- apply_sequence_filtration ---
-// This function applies sequence_filtration for every row and column.
-// It returns true if at least one cell was filled during the process.
 bool apply_sequence_filtration(void) {
     bool progress = false;
     for (int i = 0; i < board_size; i++) {
