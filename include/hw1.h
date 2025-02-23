@@ -44,13 +44,13 @@ void edge_clue_initialization(void);
 void apply_process_of_elimination(int row, int column, int piece);
 /*
 Part 3
-
+*/
 void generate_valid_sequences(int valid_sequences[MAX_SEQUENCE_CAP][MAX_LENGTH], bool is_horizontal, int index);
 void generate_valid_sequences_helper(int valid_sequences[MAX_SEQUENCE_CAP][MAX_LENGTH], bool is_horizontal, int index, int sequence[MAX_LENGTH], int starts_at);
 void generate_filtered_sequences(int filtered_sequences[MAX_SEQUENCE_CAP][MAX_LENGTH], bool is_horizontal, int index);
 bool sequence_filtration(bool is_horizontal, int index);
 bool apply_sequence_filtration(void);
-*/
+
 
 
 #endif // HW1_H
