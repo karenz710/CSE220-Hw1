@@ -329,19 +329,16 @@ int solve(const char *initial_state, const char *keys, int size)
 			}
 		}
 	}
-	print_possible_pieces_state();
+	print_possible_pieces_state(); //debug
 	printf("initial board\n");
 	print_board();
 	// apply heuristics until can't make progress
 	bool progress;
 	do {
 		progress = 0;
-
 		if(apply_sequence_filtration()){
 			progress = 1; 
 		}
-
-
 		if (apply_edge_constraint_rule()) {
             progress = 1;
         }
@@ -355,10 +352,7 @@ int solve(const char *initial_state, const char *keys, int size)
 					}	
 				}
 			}
-		}
-
-		
-				
+		}		
 	} while (progress == 1 && isFull() == 0);
 	printf("solved board\n");
 	print_board();
@@ -381,9 +375,7 @@ void populate(int row, int col){
 		}
 		// set board to piece as a char
 		board[row][col] = piece + '0';
-
 	}
-
 }
 
 bool apply_constraint_propagation(int row, int col, int value){
@@ -407,7 +399,6 @@ bool apply_constraint_propagation(int row, int col, int value){
 			// print_possible_pieces_state();
         }
     }
-    
     return changes_made;
 }
 
@@ -416,7 +407,7 @@ void initialize_possibilities(){
 	for (int row = 0; row < board_size; row++) {
         for (int col = 0; col < board_size; col++) {
             if (board[row][col] != '-') {
-                // Cell already has a value, clear all possibilities except the assigned one
+                // cell has val (only onen pos make others false)
                 int piece = board[row][col] - '0';
                 for (int k = 1; k <= board_size; k++) {
                     possible_pieces[row][col][k] = (k == piece); // index is true if possibility otherwise it is false
@@ -433,9 +424,8 @@ void initialize_possibilities(){
     }
 }
 
-// takes in INT val *set all vals to ints*
 void set_cell_value(int row, int col, int value){
-	board[row][col] = '0' + value;
+	board[row][col] = '0' + value; // char
 	// update constraint list for cells
 	for (int k = 1; k <= board_size; k++) {
 		possible_pieces[row][col][k] = (k == value); // index is true if possibility otherwise it is false
@@ -463,7 +453,7 @@ bool apply_edge_constraint_rule(void){
 				}
 			}
 		} else if (key > 1 && key < board_size) {
-			// Apply edge constraint rule
+			// apply edge constraint rule
 			// find the key and then iterate through the col eliminating possibilities
 			// iterate thru each pos
 			for (int d = 0; d < board_size; d++){
@@ -531,20 +521,13 @@ bool apply_edge_constraint_rule(void){
 	return changes_made;
 }
 
-// look for 1 and size N
-/*
-bool apply_constraint_propagation(int row, int column, int piece);
-void apply_process_of_elimination(int row, int column, int piece);
-*/
-
-// Testing functions
 void print_possible_pieces_state(void) {
    printf("Possible pieces state:\n");
     for (int row = 0; row < board_size; row++) {
         for (int col = 0; col < board_size; col++) {
             printf("(%d,%d): ", row, col);
             if (board[row][col] != '-') {
-                // cell is already solved
+                // cell has 1 val
                 printf("%c ", board[row][col]);
             } else {
                 printf("[");
@@ -615,7 +598,6 @@ void print_possible_pieces_at_cell(int row, int column){
     printf("]\n");
 }
 
-
 //keep track of how many sequences were generated.
 static int valid_seq_count = 0;
 static int filtered_seq_count = 0;
@@ -642,7 +624,6 @@ static int visible_count(const int sequence[], int length, bool from_left) {
     return count;
 }
 
-
 void generate_valid_sequences_helper(int valid_sequences[MAX_SEQUENCE_CAP][MAX_LENGTH],
                                      bool is_horizontal, int index,
                                      int sequence[MAX_LENGTH], int starts_at) {
@@ -663,7 +644,7 @@ void generate_valid_sequences_helper(int valid_sequences[MAX_SEQUENCE_CAP][MAX_L
             return;
         if (clue2 != 0 && visible_count(sequence, board_size, false) != clue2)
             return;
-        // Sequence is valid – store it
+        // sequence is valid and we must store it
         if (valid_seq_count < MAX_SEQUENCE_CAP) {
             for (int i = 0; i < board_size; i++) {
                 valid_sequences[valid_seq_count][i] = sequence[i];
@@ -672,7 +653,7 @@ void generate_valid_sequences_helper(int valid_sequences[MAX_SEQUENCE_CAP][MAX_L
         }
         return;
     }
-    //try every number from 1 to board_size that is not already in sequence.
+    //try every number from 1 to board_size that is not already in sequence
     for (int num = 1; num <= board_size; num++) {
         bool used = false;
         for (int j = 0; j < starts_at; j++) {
@@ -707,7 +688,7 @@ void generate_filtered_sequences(int filtered_sequences[MAX_SEQUENCE_CAP][MAX_LE
         for (int pos = 0; pos < board_size; pos++) {
             int seq_val = temp_valid_sequences[s][pos];
             if (is_horizontal) {
-                // For row 'index' at column 'pos'
+                //for row 'index' at col 'pos'
                 if (board[index][pos] != '-') {
                     if (board[index][pos] - '0' != seq_val) {
                         valid = false;
@@ -720,7 +701,7 @@ void generate_filtered_sequences(int filtered_sequences[MAX_SEQUENCE_CAP][MAX_LE
                     }
                 }
             } else {
-                // For column 'index' at row 'pos'
+                //for col 'index' at row 'pos'
                 if (board[pos][index] != '-') {
                     if (board[pos][index] - '0' != seq_val) {
                         valid = false;
@@ -761,18 +742,18 @@ bool sequence_filtration(bool is_horizontal, int index) {
             row = pos;
             col = index;
         }
-        //skip if the cell is already filled.
+        //skip if the cell is filled
         if (board[row][col] != '-') 
 			continue;
 
-        // set of candidates from all viable sequences for this cell.
+        //set of candidates from ALL viable sequences for this cell
         bool viableCandidates[MAX_LENGTH+1] = { false };  //
         for (int s = 0; s < filtered_seq_count; s++) {
             int candidate = filtered_sequences[s][pos];
             viableCandidates[candidate] = true;
         }
 
-        //check if all sequences agree on the same candidate.
+        //check if all sequences agree on same candidate
         bool all_same = true;
         int common_val = filtered_sequences[0][pos];
         for (int s = 1; s < filtered_seq_count; s++) {
@@ -782,11 +763,10 @@ bool sequence_filtration(bool is_horizontal, int index) {
             }
         }
         if (all_same) {
-            // All sequences agree on this candidate.
             set_cell_value(row, col, common_val);
             progress = true;
         } else {
-            // update the constraint list: remove any candidate not present in viableCandidates.
+            //constraint list update
             for (int candidate = 1; candidate <= board_size; candidate++) {
                 bool old_possible = possible_pieces[row][col][candidate];
                 possible_pieces[row][col][candidate] = possible_pieces[row][col][candidate] && viableCandidates[candidate];
@@ -794,7 +774,7 @@ bool sequence_filtration(bool is_horizontal, int index) {
                     progress = true;
                 }
             }
-            //if only one possibility force the value.
+            //if only one possibility force val
             int count = 0;
             int forced_val = 0;
             for (int candidate = 1; candidate <= board_size; candidate++) {
@@ -812,7 +792,7 @@ bool sequence_filtration(bool is_horizontal, int index) {
     return progress;
 }
 
-
+// h4!!!!!
 bool apply_sequence_filtration(void) {
     bool progress = false;
     for (int i = 0; i < board_size; i++) {
